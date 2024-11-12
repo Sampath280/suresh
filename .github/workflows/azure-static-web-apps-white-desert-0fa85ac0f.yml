@@ -19,7 +19,10 @@ jobs:
         with:
           submodules: true
           lfs: false
-
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
       # Add Node.js setup step
       - name: Setup Node.js
         uses: actions/setup-node@v3
