@@ -1,3 +1,4 @@
+# .github/workflows/azure-static-web-apps.yml
 name: Azure Static Web Apps CI/CD
 
 on:
@@ -5,69 +6,57 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened, closed]
     branches:
       - main
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+
     steps:
-      - uses: actions/checkout@v3
+      # Step 1: Checkout the code from GitHub
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
-          
+
+      # Step 2: Setup .NET Core
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 8.0.402
 
-      # Setup Node.js to ensure it's available for npm build
+      # Step 3: Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
-        
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
+          node-version: 20.18.0  # Specify the Node.js version
 
-      - name: Install Node.js dependencies
-        run: |
-          cd mksite.client
-          npm install
+      # Step 4: Install dependencies for frontend (React app)
+      - name: Install dependencies for frontend
+        working-directory: ./mksite.client
+        run: npm install
 
-      - name: Build And Deploy
+      # Step 5: Build the React app
+      - name: Build frontend
+        working-directory: ./mksite.client
+        run: npm run build
+
+      # Step 6: Publish the .NET backend
+      - name: Publish backend API
+        working-directory: ./mksite.Server
+        run: dotnet publish -c Release -o ./output
+
+      # Step 7: Deploy to Azure Static Web Apps
+      - name: Deploy to Azure Static Web Apps
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WHITE_DESERT_0FA85AC0F }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for GitHub integrations (PR comments, etc.)
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "./mksite.Server" # App source code path
-          api_location: "./mksite.client" # Api source code path - optional
-          app_build_command: 'dotnet build' # .NET build command
-          api_build_command: 'npm run build' # Node.js build command
-          output_location: "." # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
-
-  close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close Pull Request Job
-    steps:
-      - name: Close Pull Request
-        id: closepullrequest
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WHITE_DESERT_0FA85AC0F }}
-          action: "close"
+          app_location: "./mksite.client"          # React app source code path
+          api_location: "./mksite.Server/output"   # .NET backend publish output path
+          output_location: "./mksite.client/dist"  # Built app content directory (output of `npm run build`)
