@@ -59,4 +59,4 @@ jobs:
           action: "upload"
           app_location: "./mksite.client"          # React app source code path
           api_location: "./mksite.Server/output"   # .NET backend publish output path
-          output_location: "./mksite.client/dist"  # Built app content directory (output of `npm run build`)
+          output_location: "./dist"  # Built app content directory (output of `npm run build`)
