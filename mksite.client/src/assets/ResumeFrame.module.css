@@ -1,0 +1,103 @@
+.resumeAccordion {
+  width: 100%;
+  margin-bottom: 50px;
+  flex: 1 1 auto;
+}
+
+.resumeHeader {
+  width: 100%;
+  font-family: Consolas, monaco, monospace;
+  margin-bottom: 5px;
+}
+
+.resume-link {
+  color: #4c6383 !important;
+}
+
+.resume-link:hover {
+  color: #54474c !important;
+}
+
+.resume-link:active {
+  color: #54474c !important;
+}
+
+.resumeItem {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.experienceHeader {
+  background-color: rgba(35, 2, 21, 0.3);
+  color: rgb(12, 9, 13);
+  padding: 5px;
+}
+
+.accordionHeader button {
+  background-color: #6888b5c1 !important;
+  color: #091943 !important;
+  font-family: Consolas, monaco, monospace;
+}
+
+.accordionHeader button:focus {
+  background-color: #c20a72 !important;
+  box-shadow: 0 0 0 0.2rem rgba(194, 10, 114, 0.2) !important;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  margin-top: 5px !important;
+}
+
+dd {
+  font-style: italic;
+  color: rgba(12, 9, 13, 0.628);
+}
+
+.description {
+  text-align: left;
+}
+
+.genDescription {
+  padding-bottom: 5px;
+}
+
+ul {
+  max-width: 95% !important;
+  justify-content: center;
+  padding-left: 2rem !important;
+}
+
+.itemDescription li {
+  padding-bottom: 5px;
+}
+
+.teacherResume-desc {
+  font-family: MS Sans Serif, sans-serif;
+  background-color: rgba(104,136,181,0.15);;
+  border-radius: 15px 50px;
+  padding-top: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.teacherResume-exp {
+  padding-top: 10px;
+}
+
+a {
+  text-decoration: none !important;
+  color: rgb(12, 9, 13) !important;
+}
+
+.competencyContainer {
+  display: inline-flex;
+  max-width: 150px !important;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.competencyContainer img {
+  margin: auto;
+  display: block;
+}

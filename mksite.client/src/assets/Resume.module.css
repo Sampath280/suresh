@@ -1,0 +1,23 @@
+.resumeNav {
+  align-items: center;
+}
+
+.resumeNav-link {
+  color: #230215 !important;
+}
+
+.resumeNav-link:hover {
+  color: #efecca;
+}
+
+.resumeNav-link:focus {
+  color: #54474c !important;
+}
+
+.resumeNav-link:hover {
+  color: #54474c !important;
+}
+
+.resumeNav:active {
+  color: #230215 !important;
+}
