@@ -1,27 +1,37 @@
+import { fileURLToPath, URL } from 'node:url';
+
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import basicSsl from '@vitejs/plugin-basic-ssl';
+import plugin from '@vitejs/plugin-react';
+import { env } from 'process';
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
-const target = process.env.ASPNETCORE_HTTPS_PORT
-  ? `https://localhost:${process.env.ASPNETCORE_HTTPS_PORT}`
-  : process.env.ASPNETCORE_URLS?.split(';')[0] || 'https://localhost:7012';
 
+
+const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
+    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7012';
+
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), basicSsl()],
-  server: {
-    proxy: {
-      '^/experience': {
-        target,
-        secure: false,
-      },
-      '^/about': {
-        target,
-        secure: false,
-      },
+    build: {
+        watch: null
     },
-    port: 5173,
-  },
-  build: {
-    outDir: 'dist', // This should match output_location in GitHub Actions
-  },
-});
+    plugins: [plugin(), basicSsl()],
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url))
+        }
+    },
+    server: {
+        proxy: {
+            '^/experience':{
+                target,
+                secure: false
+            },
+            '^/about':{
+                target,
+                secure: false
+            }
+        },
+        port: 5173
+    }
+})
